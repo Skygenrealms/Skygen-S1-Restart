@@ -1,0 +1,310 @@
+:root {
+    --primary-bg: #1e1e2f;
+    --secondary-bg: #27293d;
+    --card-bg: #2c2f48;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a9a9a9;
+    --accent-primary: #4ecca3;
+    --accent-secondary: #3a8d7a;
+    --role-owner: #e74c3c;        /* Red */
+    --role-co-owner: #2ecc71;      /* Green */
+    --role-head-admin: #9b59b6;   /* Purple */
+    --role-head-builder: #e67e22; /* Orange */
+    --role-admin: #3498db;        /* Blue */
+    --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+body {
+    background-color: var(--primary-bg);
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-primary);
+    margin: 0;
+    padding-top: 70px; /* Space for fixed navbar */
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.page-title {
+    text-align: center;
+    color: var(--accent-primary);
+    font-size: 2.8em;
+    margin-bottom: 0;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.1em;
+    max-width: 600px;
+    margin: 0 auto 40px auto;
+}
+
+/* --- Navbar --- */
+.navbar {
+    background-color: var(--secondary-bg);
+    padding: 15px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+.nav-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    color: var(--accent-primary);
+    font-weight: 700;
+    font-size: 1.5em;
+    text-decoration: none;
+}
+
+.nav-links a {
+    color: var(--text-primary);
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--accent-primary);
+}
+
+/* --- Hero Section (Homepage) --- */
+.hero {
+    background: linear-gradient(rgba(30, 30, 47, 0.8), rgba(30, 30, 47, 0.8)), url('https://www.minecraft.net/content/dam/games/minecraft/key-art/Caves-and-Cliffs-Part-II-Update_Key-Art.jpg') no-repeat center center/cover;
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3.5em;
+    margin-bottom: 10px;
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--accent-primary);
+    color: var(--primary-bg);
+}
+.btn-primary:hover {
+    background-color: var(--accent-secondary);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 2px solid var(--accent-primary);
+    color: var(--accent-primary);
+}
+.btn-secondary:hover {
+    background-color: var(--accent-primary);
+    color: var(--primary-bg);
+}
+
+/* --- Cards & Grids --- */
+.card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    margin-bottom: 25px;
+    transition: transform 0.2s ease-in-out;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h2 {
+    color: var(--accent-primary);
+    border-bottom: 2px solid var(--secondary-bg);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+.card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.4em;
+    text-transform: capitalize;
+    /* Default color if no specific class is matched */
+    color: var(--accent-primary);
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+/* --- Staff Page Specifics --- */
+.staff-role {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+.staff-role.owner { background-color: var(--role-owner); }
+.staff-role.co-owner { background-color: var(--role-co-owner); }
+.staff-role.head-admin { background-color: var(--role-head-admin); }
+.staff-role.head-builder { background-color: var(--role-head-builder); }
+.staff-role.admin { background-color: var(--role-admin); }
+
+.staff-name {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+/* --- Rules Page Specifics --- */
+.rule-list {
+    list-style: none;
+    padding-left: 0;
+}
+.rule-list li {
+    padding: 10px;
+    border-bottom: 1px solid var(--secondary-bg);
+    transition: background-color 0.2s;
+}
+.rule-list li:last-child {
+    border-bottom: none;
+}
+.rule-list li:hover {
+    background-color: var(--secondary-bg);
+}
+.rule-list li::before {
+    content: '»';
+    color: var(--accent-primary);
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.consequences strong {
+    color: var(--role-owner);
+}
+
+/* --- Teams Page Specifics --- */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.team-card {
+    padding: 20px;
+}
+
+.team-card h3 {
+    /* Add a shadow to make colors pop */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.team-card p {
+    margin: 5px 0;
+    font-size: 0.95em;
+}
+
+.team-card strong {
+    color: var(--text-secondary);
+}
+
+.looking {
+    color: var(--text-secondary);
+    font-style: italic;
+    opacity: 0.8;
+}
+
+/* --- Team Name Colors (FIXED) --- */
+.team-card .team-blaze { color: #F2BD27; }
+.team-card .team-iron { color: #D8D8D8; }
+.team-card .team-creeking { color: #5E81AC; }
+.team-card .team-ominous { color: #5D3A9B; }
+.team-card .team-deepdark { color: #0D6973; }
+.team-card .team-dragon { color: #C482FD; }
+.team-card .team-lapis { color: #2B52C9; }
+.team-card .team-emerald { color: #00B039; }
+.team-card .team-resin { color: #FFBF00; }
+.team-card .team-redstone { color: #FF0000; }
+.team-card .team-soul { color: #62D2D6; }
+.team-card .team-prismarine { color: #72B8A4; }
+.team-card .team-ice { color: #A3D5EE; }
+.team-card .team-coal { color: #747474; }
+.team-card .team-mangrove { color: #9A3E3E; }
+.team-card .team-lava { color: #FF7000; }
+.team-card .team-skeleton { color: #E0E0E0; }
+.team-card .team-milk { color: #FFFFFF; }
+.team-card .team-slime { color: #8AD44A; }
+.team-card .team-copper { color: #E28C5E; }
+.team-card .team-pumpkin { color: #E08221; }
+.team-card .team-water { color: #4369E8; }
+.team-card .team-dirty { color: #A16A43; }
+.team-card .team-zombie { color: #658458; }
+.team-card .team-cream { color: #FFFDD0; }
+.team-card .team-honey { color: #FFAA00; }
+.team-card .team-axolotl { color: #FF87AB; }
+.team-card .team-cactus { color: #008000; }
+.team-card .team-blood { color: #8b0000; }
+.team-card .team-snow { color: #F0F8FF; }
+.team-card .team-glowstone { color: #FFEC8B; }
+.team-card .team-firework { color: #FF69B4; }
+.team-card .team-moss { color: #699941; }
+.team-card .team-magma { color: #FF5500; }
+.team-card .team-villager { color: #BE8A64; }
+.team-card .team-black { color: #C0C0C0; } /* Made light grey for visibility */
+.team-card .team-turtle { color: #3A9D23; }
+.team-card .team-pickle { color: #6A7634; }
+.team-card .team-iron-2 { color: #D8D8D8; }
+.team-card .team-darkblue { color: #00008B; }
+.team-card .team-kelp { color: #4B681A; }
+.team-card .team-gold { color: #F9D831; }
+.team-card .team-green { color: #00FF00; }
+.team-card .team-skulk { color: #15A9A0; }
+.team-card .team-gunpowder { color: #A9A9A9; }
+.team-card .team-sniffer { color: #C04646; }
+.team-card .team-clown { color: #FF4500; }
+.team-card .team-netherite { color: #A0A0A0; }
+.team-card .team-ruby { color: #E0115F; }
+.team-card .team-darkness { color: #6E6E6E; }
+.team-card .team-uk { background: linear-gradient(to right, #012169, white 50%, #C8102E 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.team-card .team-clay { color: #A19B96; }
+.team-card .team-donut { color: #F4A460; }
+.team-card .team-rainbow { background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.team-card .team-ghast { color: #F5F5F5; }
+.team-card .team-light { color: #FFFFE0; }
+.team-card .team-light-blue { color: #ADD8E6; }
+.team-card .team-nether { color: #800000; }
+.team-card .team-kfc { background: linear-gradient(to right, #FE0000, white); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
