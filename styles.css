@@ -477,3 +477,26 @@ button#sign-out:hover, button#google-signin:hover, button#github-signin:hover {
         justify-content: center;
     }
 }
+.staff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.staff-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.staff-role {
+  font-size: 1rem;
+  color: #666;
+  margin: 0.5rem 0 0;
+}
+
+.owner-role { color: #FFD700; } /* Gold for Owner */
+.co-owner-role { color: #C0C0C0; } /* Silver for Co-Owner */
+.head-admin-role { color: #FF4500; } /* OrangeRed for Head Admin */
+.head-builder-admin-role { color: #4682B4; } /* SteelBlue for Head Builder/Admin */
+.admin-role { color: #32CD32; } /* LimeGreen for Admin */
