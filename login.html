@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In - Skygen S1 Restart</title>
+  <title>Secure Sign-In - Skygen S1 Restart</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -16,27 +16,30 @@
         <a href="rules.html" class="nav-link">Rules</a>
         <a href="admins.html" class="nav-link">Staff</a>
         <a href="teams.html" class="nav-link">Teams</a>
+        <a href="login.html" class="nav-link">Login</a>
       </div>
     </div>
   </nav>
 
-  <div class="container">
-    <h1 class="page-title">Sign In</h1>
-    <p class="subtitle">Access the Skygen Realm admin panel.</p>
-    <div class="card">
+  <div class="container" style="max-width: 450px;">
+    <div class="card text-center">
+      <h1 class="page-title" style="font-size: 2.5em;">Sign In</h1>
+      <p class="subtitle" style="margin-bottom: 20px;">Access the team editing panel.</p>
       <form id="login-form">
         <input type="email" id="email" placeholder="Email" required>
         <input type="password" id="password" placeholder="Password" required>
-        <button type="submit" class="btn">Sign In</button>
+        <button type="submit">Sign In</button>
       </form>
-      <p id="message" class="error-message"></p>
+      
+      <p id="message"></p>
     </div>
   </div>
 
   <!-- Firebase SDK (loaded as modules) -->
   <script type="module">
+    // Import Firebase SDK modules
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+    import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
     // Your Firebase configuration
     const firebaseConfig = {
@@ -59,18 +62,47 @@
       }
     });
 
+    const messageEl = document.getElementById('message');
+
     // Email/Password Sign-In
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
+    document.getElementById('login-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        document.getElementById('message').textContent = 'Signed in successfully!';
-        window.location.href = 'protected.html';
-      } catch (error) {
-        document.getElementById('message').textContent = `Error: ${error.message}`;
-      }
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          messageEl.textContent = 'Signed in successfully!';
+          window.location.href = 'protected.html';
+        })
+        .catch((error) => {
+          messageEl.textContent = `Error: ${error.message}`;
+        });
+    });
+
+    // Google Sign-In
+    document.getElementById('google-signin').addEventListener('click', () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          messageEl.textContent = 'Signed in with Google!';
+          window.location.href = 'protected.html';
+        })
+        .catch((error) => {
+          messageEl.textContent = `Error: ${error.message}`;
+        });
+    });
+
+    // GitHub Sign-In
+    document.getElementById('github-signin').addEventListener('click', () => {
+      const provider = new GithubAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          messageEl.textContent = 'Signed in with GitHub!';
+          window.location.href = 'protected.html';
+        })
+        .catch((error) => {
+          messageEl.textContent = `Error: ${error.message}`;
+        });
     });
   </script>
 </body>

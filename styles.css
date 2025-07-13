@@ -1,101 +1,424 @@
+/* styles.css */
+:root {
+    --primary-bg: #12101E;        /* Very dark space blue/purple */
+    --secondary-bg: #1D1B2D;      /* Lighter surface color */
+    --card-bg: #242235;           /* Card and Navbar background */
+    --text-primary: #EAEAEA;
+    --text-secondary: #9B99A9;
+    --accent-primary: #A450F9;    /* Vibrant Purple */
+    --accent-secondary: #36DDF8;  /* Bright Cyan */
+    --border-color: rgba(164, 80, 249, 0.2);
+    --shadow-color: rgba(0, 0, 0, 0.25);
+    --warning-color: #f39c12;
+}
+
 body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-}
-
-.navbar {
-  background-color: #333;
-  padding: 1rem;
-}
-
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nav-brand {
-  color: #fff;
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.nav-links {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.nav-link {
-  color: #fff;
-  text-decoration: none;
-  font-size: 1rem;
-}
-
-.nav-link:hover {
-  color: #ddd;
+    background-color: var(--primary-bg);
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-primary);
+    margin: 0;
+    padding-top: 70px; /* Space for fixed navbar */
+    line-height: 1.6;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .page-title {
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 1rem;
+    text-align: center;
+    color: var(--text-primary);
+    font-size: 3em;
+    margin-bottom: 5px;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 .subtitle {
-  font-size: 1.2rem;
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.1em;
+    max-width: 600px;
+    margin: 0 auto 50px auto;
 }
 
-.card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  margin-bottom: 1rem;
+/* --- Navbar --- */
+.navbar {
+    background-color: var(--card-bg);
+    padding: 15px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 15px var(--shadow-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
-input {
-  width: 100%;
-  padding: 0.75rem;
-  margin: 0.5rem 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
+.nav-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
+.nav-brand {
+    color: var(--accent-primary);
+    font-weight: 700;
+    font-size: 1.5em;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.nav-brand:hover {
+    color: var(--accent-secondary);
+}
+
+.nav-links a {
+    color: var(--text-primary);
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--accent-primary);
+}
+
+/* --- Hero Section --- */
+.hero {
+    background: linear-gradient(rgba(18, 16, 30, 0.85), rgba(18, 16, 30, 0.95)), url('https://www.minecraft.net/content/dam/games/minecraft/key-art/Caves-and-Cliffs-Part-II-Update_Key-Art.jpg') no-repeat center center/cover;
+    color: var(--text-primary);
+    padding: 100px 20px;
+    text-align: center;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 3.5em;
+    margin-bottom: 10px;
+    text-shadow: 0 0 15px rgba(164, 80, 249, 0.5);
+}
+
+.hero .subtitle {
+    font-size: 1.3em;
+    margin-bottom: 30px;
+    color: #ccc;
+}
+
+.hero .btn {
+    margin: 10px;
+}
+
+/* --- Buttons --- */
 .btn {
-  background-color: #007bff;
-  color: #fff;
-  padding: 0.75rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  width: 100%;
-  margin: 0.5rem 0;
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+    font-size: 1em;
 }
 
-.btn:hover {
-  background-color: #0056b3;
+.btn-primary {
+    background-color: var(--accent-primary);
+    color: white;
+    box-shadow: 0 0 20px rgba(164, 80, 249, 0.4);
 }
 
-.error-message {
-  color: #ff0000;
-  font-size: 1rem;
-  text-align: center;
-  margin-top: 1rem;
+.btn-primary:hover {
+    background-color: #b866ff;
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(164, 80, 249, 0.6);
 }
+
+.btn-secondary {
+    background-color: transparent;
+    border: 2px solid var(--accent-secondary);
+    color: var(--accent-secondary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--accent-secondary);
+    color: var(--primary-bg);
+    box-shadow: 0 0 20px rgba(54, 221, 248, 0.4);
+}
+
+/* --- Cards & Grids --- */
+.card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 20px var(--shadow-color);
+    margin-bottom: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.card h2 {
+    color: var(--accent-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+.card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    text-transform: capitalize;
+    color: var(--text-primary);
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+/* --- Staff Page Specifics --- */
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.staff-role {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.staff-role.owner { background: linear-gradient(45deg, var(--accent-primary), #c37aff); }
+.staff-role.co-owner { background: linear-gradient(45deg, var(--accent-secondary), #69e4fa); color: var(--primary-bg); }
+.staff-role.head-admin { background-color: var(--accent-primary); opacity: 0.9; }
+.staff-role.head-builder { background-color: var(--accent-secondary); opacity: 0.9; color: var(--primary-bg); }
+.staff-role.admin { background-color: var(--secondary-bg); border-color: var(--text-secondary); color: var(--text-secondary); }
+
+.staff-name {
+    font-size: 1.6em;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+/* --- Rules Page Specifics --- */
+.rule-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.rule-list li {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
+    border-radius: 5px;
+}
+
+.rule-list li:last-child {
+    border-bottom: none;
+}
+
+.rule-list li:hover {
+    background-color: rgba(164, 80, 249, 0.1);
+}
+
+.rule-list li::before {
+    content: '»';
+    color: var(--accent-primary);
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.consequences { border-left: 4px solid var(--warning-color); }
+.consequences strong { color: var(--warning-color); }
+.report-section { border-left: 4px solid var(--accent-secondary); }
+
+/* --- Teams Page Specifics --- */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.team-card {
+    padding: 25px;
+}
+
+.team-card h3 {
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+    font-size: 1.7em;
+}
+
+.team-card p {
+    margin: 5px 0;
+    font-size: 1em;
+}
+
+.team-card strong {
+    color: var(--text-secondary);
+}
+
+.looking {
+    color: var(--accent-secondary);
+    font-style: italic;
+    font-weight: 600;
+}
+
+/* --- Form Styling (for login.html, protected.html) --- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+form#team-form {
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="email"], input[type="password"], select {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    color: var(--text-primary);
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    box-sizing: border-box; /* Important for consistent sizing */
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 10px rgba(164, 80, 249, 0.5);
+}
+
+button {
+    padding: 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-size: 1em;
+    background-color: var(--accent-primary);
+    color: white;
+}
+button:hover {
+    background-color: #b866ff;
+    transform: translateY(-2px);
+}
+button#sign-out, button#google-signin, button#github-signin {
+    background-color: var(--secondary-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+button#sign-out:hover, button#google-signin:hover, button#github-signin:hover {
+    background-color: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+#message, #user-info {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-secondary);
+}
+
+/* --- Team Specific Colors (Improved for readability) --- */
+.team-blaze { color: #F2BD27; }
+.team-iron { color: #D8D8D8; }
+.team-creeking { color: #A0522D; } /* Lightened */
+.team-ominous { color: #A9A9A9; } /* Lightened */
+.team-deepdark { color: #556B2F; } /* Changed to Olive Drab for contrast */
+.team-dragon { color: #9370DB; } /* Medium Purple */
+.team-lapis { color: #1E90FF; }
+.team-emerald { color: #50C878; } /* Emerald Green */
+.team-resin { color: #FFD700; }
+.team-redstone { color: #FF4500; } /* Orange Red */
+.team-soul { color: #40E0D0; }
+.team-prismarine { color: #39CCCC; }
+.team-ice { color: #ADD8E6; }
+.team-coal { color: #9E9E9E; } /* Lightened */
+.team-mangrove { color: #8B4513; }
+.team-lava { color: #FF4500; }
+.team-skeleton { color: #F5F5F5; } /* Whitesmoke */
+.team-milk { color: #FFFFFF; }
+.team-slime { color: #32CD32; }
+.team-copper { color: #B87333; }
+.team-pumpkin { color: #FF7518; }
+.team-water { color: #4169E1; } /* Royal Blue */
+.team-dirty { color: #96693D; } /* Lightened brown */
+.team-zombie { color: #6B8E23; } /* Olive Drab */
+.team-cream { color: #FFFDD0; }
+.team-honey { color: #FFC107; }
+.team-axolotl { color: #FF69B4; }
+.team-cactus { color: #2E8B57; }
+.team-blood { color: #DC143C; } /* Crimson */
+.team-snow { color: #F0F8FF; }
+.team-glowstone { color: #FFFF99; }
+.team-firework { color: #FF00FF; }
+.team-moss { color: #739A65; } /* Lightened */
+.team-magma { color: #FF6347; } /* Tomato */
+.team-villager { color: #8A2BE2; }
+.team-black { color: #CCCCCC; } /* Cannot be black, changed to light grey */
+.team-turtle { color: #008080; }
+.team-pickle { color: #9ACD32; }
+.team-iron-2 { color: #C0C0C0; }
+.team-darkblue { color: #87CEEB; } /* Changed to Sky Blue for contrast */
+.team-kelp { color: #5F9EA0; } /* Cadet Blue */
+.team-gold { color: #FFD700; }
+.team-green { color: #228B22; } /* Forest Green */
+.team-skulk { color: #36DDF8; } /* Matched to secondary accent */
+.team-gunpowder { color: #BEBEBE; } /* Lightened */
+.team-sniffer { color: #CD853F; } /* Peru */
+.team-clown { color: #FF6347; }
+.team-netherite { color: #A9A9A9; } /* Matched Ominous */
+.team-ruby { color: #E0115F; }
+.team-darkness { color: #778899; } /* Light Slate Gray */
+.team-uk {
+  background: linear-gradient(90deg, #CF142B, #FFFFFF, #00247D); /* Official UK Flag Colors */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.team-clay { color: #D7D7D7; }
+.team-donut { color: #FFB6C1; }
+.team-rainbow {
+  background: linear-gradient(90deg, #FF0000, #FFA500, #FFFF00, #008000, #0000FF, #4B0082, #EE82EE);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.team-ghast { color: #F5F5F5; }
+.team-light { color: #FFFFE0; }
+.team-light-blue { color: #87CEEB; }
+.team-nether { color: #B22222; } /* Firebrick */
+.team-kfc { color: #F40002; }

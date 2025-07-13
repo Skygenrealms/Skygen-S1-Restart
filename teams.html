@@ -24,13 +24,15 @@
   <div class="container">
     <h1 class="page-title">Realm Teams</h1>
     <p class="subtitle">Here are the official teams of the Skygen Realm.</p>
-    <div class="team-grid" id="teams-list"></div>
+    <div class="team-grid" id="teams-list">
+      <!-- Teams will be loaded here by JavaScript -->
+    </div>
   </div>
 
   <!-- Firebase SDK (loaded as modules) -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+    import { getFirestore, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
     // Your Firebase configuration
     const firebaseConfig = {
@@ -49,20 +51,34 @@
     // Fetch and display team data
     const teamsList = document.getElementById('teams-list');
     try {
-      const querySnapshot = await getDocs(collection(db, 'teams'));
-      teamsList.innerHTML = '';
-      querySnapshot.forEach((doc) => {
-        const team = doc.data();
-        const teamDiv = document.createElement('div');
-        teamDiv.className = `card team-card text-center team-${doc.id.toLowerCase()}`;
-        teamDiv.innerHTML = `
-          <h3 class="team-${doc.id.toLowerCase()}">${team.name}</h3>
-          <p><strong>Leader:</strong> ${team.leader.includes('Looking for leader') ? '<span class="looking">Looking for leader</span>' : team.leader}</p>
-        `;
-        teamsList.appendChild(teamDiv);
-      });
+      // Query teams and order them by name alphabetically
+      const q = query(collection(db, 'teams'), orderBy('name'));
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) {
+        teamsList.innerHTML = '<p class="text-center">No teams found. Check back later!</p>';
+      } else {
+        teamsList.innerHTML = ''; // Clear any loading message
+        querySnapshot.forEach((doc) => {
+          const team = doc.data();
+          const teamDiv = document.createElement('div');
+          // Use the document ID for the team-specific class
+          teamDiv.className = `card team-card text-center`; 
+          
+          let leaderHTML = team.leader;
+          if (team.leader && team.leader.toLowerCase().includes('looking for leader')) {
+            leaderHTML = '<span class="looking">Looking for leader</span>';
+          }
+
+          teamDiv.innerHTML = `
+            <h3 class="team-${doc.id.toLowerCase()}">${team.name}</h3>
+            <p><strong>Leader:</strong> ${leaderHTML}</p>
+          `;
+          teamsList.appendChild(teamDiv);
+        });
+      }
     } catch (error) {
-      teamsList.innerHTML = `<p>Error: ${error.message}</p>`;
+      teamsList.innerHTML = `<p class="text-center" style="color: var(--warning-color);">Error loading teams: ${error.message}</p>`;
     }
   </script>
 </body>

@@ -21,19 +21,21 @@
     </div>
   </nav>
 
-  <div class="container">
-    <h1 class="page-title">Edit Team Data</h1>
-    <p id="user-info"></p>
-    <form id="team-form">
-      <select id="team-name" required>
-        <option value="" disabled selected>Select a Team</option>
-        <!-- Team names will be populated dynamically -->
-      </select>
-      <button type="button" id="select-team">Select</button>
-      <input type="text" id="team-leader" placeholder="Team Leader (e.g., KarinaOMG9776)" required>
-      <button type="submit" id="push-team">Push</button>
-    </form>
-    <button id="sign-out">Sign Out</button>
+  <div class="container" style="max-width: 600px;">
+      <div class="card">
+        <h1 class="page-title">Edit Team Data</h1>
+        <p id="user-info" class="text-center"></p>
+        <form id="team-form">
+          <select id="team-name" required>
+            <option value="" disabled selected>Select a Team</option>
+            <!-- Team names will be populated dynamically -->
+          </select>
+          <button type="button" id="select-team">Load Team Leader</button>
+          <input type="text" id="team-leader" placeholder="Team Leader (e.g., KarinaOMG9776)" required>
+          <button type="submit" id="push-team">Push Update</button>
+        </form>
+        <button id="sign-out">Sign Out</button>
+      </div>
   </div>
 
   <!-- Firebase SDK (loaded as modules) -->
@@ -57,10 +59,12 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    const userInfoEl = document.getElementById('user-info');
+
     // Check authentication state
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        document.getElementById('user-info').textContent = `Hello, ${user.displayName || user.email}!`;
+        userInfoEl.textContent = `Hello, ${user.displayName || user.email}!`;
         populateTeamDropdown();
       } else {
         window.location.href = 'index.html';
@@ -82,7 +86,7 @@
           }
         });
       } catch (error) {
-        document.getElementById('user-info').textContent = `Error loading teams: ${error.message}`;
+        userInfoEl.textContent = `Error loading teams: ${error.message}`;
       }
     }
 
@@ -90,7 +94,7 @@
     document.getElementById('select-team').addEventListener('click', async () => {
       const teamId = document.getElementById('team-name').value;
       if (!teamId) {
-        document.getElementById('user-info').textContent = 'Please select a team!';
+        userInfoEl.textContent = 'Please select a team!';
         return;
       }
       try {
@@ -99,12 +103,12 @@
         if (docSnap.exists()) {
           const team = docSnap.data();
           document.getElementById('team-leader').value = team.leader || '';
-          document.getElementById('user-info').textContent = `Loaded leader for ${team.name}`;
+          userInfoEl.textContent = `Loaded leader for ${team.name}`;
         } else {
-          document.getElementById('user-info').textContent = 'Team not found!';
+          userInfoEl.textContent = 'Team not found!';
         }
       } catch (error) {
-        document.getElementById('user-info').textContent = `Error: ${error.message}`;
+        userInfoEl.textContent = `Error: ${error.message}`;
       }
     });
 
@@ -116,11 +120,11 @@
       const user = auth.currentUser;
 
       if (!teamId) {
-        document.getElementById('user-info').textContent = 'Please select a team!';
+        userInfoEl.textContent = 'Please select a team!';
         return;
       }
       if (!teamLeader) {
-        document.getElementById('user-info').textContent = 'Leader name is required!';
+        userInfoEl.textContent = 'Leader name is required!';
         return;
       }
 
@@ -128,7 +132,7 @@
         const docRef = doc(db, 'teams', teamId);
         const docSnap = await getDoc(docRef);
         if (!docSnap.exists()) {
-          document.getElementById('user-info').textContent = 'Team not found!';
+          userInfoEl.textContent = 'Team not found!';
           return;
         }
 
@@ -139,11 +143,11 @@
           userId: user.uid,
           timestamp: new Date().toISOString()
         }, { merge: true });
-        document.getElementById('user-info').textContent = `Team ${teamName} updated successfully!`;
+        userInfoEl.textContent = `Team ${teamName} updated successfully!`;
         document.getElementById('team-leader').value = ''; // Clear leader input
         document.getElementById('team-name').value = ''; // Reset dropdown
       } catch (error) {
-        document.getElementById('user-info').textContent = `Error: ${error.message}`;
+        userInfoEl.textContent = `Error: ${error.message}`;
       }
     });
 
@@ -154,7 +158,7 @@
           window.location.href = 'index.html';
         })
         .catch((error) => {
-          document.getElementById('user-info').textContent = `Sign-out error: ${error.message}`;
+          userInfoEl.textContent = `Sign-out error: ${error.message}`;
         });
     });
   </script>
