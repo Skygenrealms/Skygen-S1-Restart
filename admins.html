@@ -1,67 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff - Skygen S1 Restart</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff - Skygen S1 Restart</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="nav-brand">Skygen S1 Restart</a>
-            <div class="nav-links">
-                <a href="rules.html" class="nav-link">Rules</a>
-                <a href="admins.html" class="nav-link">Staff</a>
-                <a href="teams.html" class="nav-link">Teams</a>
-                <a href="login.html" class="nav-link">Login</a>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container">
-        <h1 class="page-title">Admins & Staff</h1>
-        <p class="subtitle">Our team is here to help. Reach out to them in-game, on Xbox or on Discord for assistance.</p>
-
-        <div class="staff-grid">
-            <div class="card text-center">
-                <h3 class="staff-name">BDN Callum</h3>
-                <p class="staff-role owner">Owner</p>
-            </div>
-            <div class="card text-center">
-                <h3 class="staff-name">RockyRino09</h3>
-                <p class="staff-role co-owner">Co-Owner</p>
-            </div>
-            <div class="card text-center">
-                <h3 class="staff-name">Vote Ongoing</h3>
-                <p class="staff-role head-admin">Head Admin</p>
-            </div>
-             <div class="card text-center">
-                <h3 class="staff-name">BDN Bobjan</h3>
-                <p class="staff-role head-builder">Head Builder/Admin</p>
-            </div>
-             <div class="card text-center">
-                <h3 class="staff-name">BDN Daqzz</h3>
-                <p class="staff-role admin">Admin</p>
-            </div>
-            <div class="card text-center">
-                <h3 class="staff-name">FMB2K97169</h3>
-                <p class="staff-role admin">Admin</p>
-            </div>
-           
-            <div class="card text-center">
-                <h3 class="staff-name">ZenarthXxX</h3>
-                <p class="staff-role admin">Admin</p>
-            </div>
-             <div class="card text-center">
-                <h3 class="staff-name">BDN Pinktree</h3>
-                <p class="staff-role admin">Admin</p>
-            </div>
-        </div>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">Skygen S1 Restart</a>
+      <div class="nav-links">
+        <a href="rules.html" class="nav-link">Rules</a>
+        <a href="admins.html" class="nav-link">Staff</a>
+        <a href="teams.html" class="nav-link">Teams</a>
+      </div>
     </div>
+  </nav>
 
+  <div class="container">
+    <h1 class="page-title">Staff Team</h1>
+    <p class="subtitle">Meet the staff of the Skygen Realm.</p>
+    <div class="staff-grid" id="staff-list"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBiJ_uZZiV2TEf_KTOafAp3Mh6McWzJCv0",
+      authDomain: "skygen-login.firebaseapp.com",
+      projectId: "skygen-login",
+      storageBucket: "skygen-login.firebasestorage.app",
+      messagingSenderId: "536521368487",
+      appId: "1:536521368487:web:bda690853dbfbb2b21cc82"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const staffList = document.getElementById('staff-list');
+    try {
+      const querySnapshot = await getDocs(collection(db, 'admins'));
+      staffList.innerHTML = '';
+      querySnapshot.forEach((doc) => {
+        const admin = doc.data();
+        if (!admin.name || !admin.rank || admin.name.trim() === '' || admin.rank.trim() === '') {
+          console.log(`Skipping invalid document: ${doc.id}`);
+          return;
+        }
+        const adminDiv = document.createElement('div');
+        adminDiv.className = `card text-center staff-${doc.id.toLowerCase()}`;
+        adminDiv.innerHTML = `
+          <h3 class="staff-name">${admin.name}</h3>
+          <p class="staff-role ${admin.rank.toLowerCase().replace(/[^a-z0-9]/g, '-')}-role">${admin.rank}</p>
+        `;
+        staffList.appendChild(adminDiv);
+      });
+      if (staffList.innerHTML === '') {
+        staffList.innerHTML = '<p>No staff found.</p>';
+      }
+    } catch (error) {
+      staffList.innerHTML = `<p>Error: ${error.message}</p>`;
+    }
+  </script>
 </body>
 </html>
