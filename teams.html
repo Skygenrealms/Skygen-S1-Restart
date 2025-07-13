@@ -42,30 +42,46 @@
     const db = getFirestore(app);
     const teamsList = document.getElementById('teams-list');
 
-    try {
-      const q = query(collection(db, 'teams'), orderBy('name'));
-      const querySnapshot = await getDocs(q);
-      if (querySnapshot.empty) {
-        teamsList.innerHTML = '<p class="text-center">No teams found. Check back later!</p>';
-        return;
+    async function loadTeams() {
+      try {
+        console.log('Fetching teams from Firestore...');
+        const q = query(collection(db, 'teams'), orderBy('name'));
+        const querySnapshot = await getDocs(q);
+        console.log(`Found ${querySnapshot.size} team documents`);
+
+        if (querySnapshot.empty) {
+          console.log('No teams found');
+          teamsList.innerHTML = '<p class="text-center">No teams found. Check back later!</p>';
+          return;
+        }
+
+        teamsList.innerHTML = '';
+        querySnapshot.forEach((doc) => {
+          const team = doc.data();
+          console.log(`Processing team: ${doc.id}`, team);
+          if (!team.name || team.name.trim() === '') {
+            console.warn(`Skipping invalid team: ${doc.id}`, team);
+            return;
+          }
+          const teamDiv = document.createElement('div');
+          teamDiv.className = `card team-card text-center`;
+          const leaderHTML = team.leader && team.leader.toLowerCase().includes('looking for leader')
+            ? '<span class="looking">Looking for leader</span>'
+            : team.leader || 'No leader assigned';
+          teamDiv.innerHTML = `
+            <h3 class="team-${doc.id.toLowerCase()}">${team.name}</h3>
+            <p><strong>Leader:</strong> ${leaderHTML}</p>
+          `;
+          teamsList.appendChild(teamDiv);
+        });
+        console.log('Teams rendered successfully');
+      } catch (error) {
+        console.error('Error loading teams:', error);
+        teamsList.innerHTML = `<p class="text-center warning">Error loading teams: ${error.message}</p>`;
       }
-      teamsList.innerHTML = '';
-      querySnapshot.forEach((doc) => {
-        const team = doc.data();
-        const teamDiv = document.createElement('div');
-        teamDiv.className = `card team-card text-center`;
-        const leaderHTML = team.leader && team.leader.toLowerCase().includes('looking for leader')
-          ? '<span class="looking">Looking for leader</span>'
-          : team.leader;
-        teamDiv.innerHTML = `
-          <h3 class="team-${doc.id.toLowerCase()}">${team.name}</h3>
-          <p><strong>Leader:</strong> ${leaderHTML}</p>
-        `;
-        teamsList.appendChild(teamDiv);
-      });
-    } catch (error) {
-      teamsList.innerHTML = `<p class="text-center warning">Error loading teams: ${error.message}</p>`;
     }
+
+    loadTeams();
   </script>
 </body>
 </html>
