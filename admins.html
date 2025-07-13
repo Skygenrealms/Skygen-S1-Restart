@@ -39,33 +39,52 @@
       appId: "1:536521368487:web:bda690853dbfbb2b21cc82"
     };
 
+    // Define rank hierarchy (lower number = higher rank)
+    const rankOrder = {
+      'Owner': 1,
+      'Co-Owner': 2,
+      'Head Admin': 3,
+      'Head Builder/Admin': 4,
+      'Admin': 5
+    };
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
     const staffList = document.getElementById('staff-list');
     try {
       const querySnapshot = await getDocs(collection(db, 'admins'));
-      staffList.innerHTML = '';
+      const admins = [];
       querySnapshot.forEach((doc) => {
         const admin = doc.data();
         if (!admin.name || !admin.rank || admin.name.trim() === '' || admin.rank.trim() === '') {
           console.log(`Skipping invalid document: ${doc.id}`);
           return;
         }
+        admins.push({ id: doc.id, ...admin });
+      });
+
+      // Sort admins by rank
+      admins.sort((a, b) => {
+        const rankA = rankOrder[a.rank] || 999; // Unknown ranks go last
+        const rankB = rankOrder[b.rank] || 999;
+        if (rankA !== rankB) return rankA - rankB;
+        return a.name.localeCompare(b.name); // Secondary sort by name
+      });
+
+      staffList.innerHTML = '';
+      admins.forEach((admin) => {
         const adminDiv = document.createElement('div');
-        adminDiv.className = `card text-center staff-${doc.id.toLowerCase()}`;
+        adminDiv.className = `card text-center staff-${admin.id.toLowerCase()}`;
         adminDiv.innerHTML = `
           <h3 class="staff-name">${admin.name}</h3>
           <p class="staff-role ${admin.rank.toLowerCase().replace(/[^a-z0-9]/g, '-')}-role">${admin.rank}</p>
         `;
         staffList.appendChild(adminDiv);
       });
+
       if (staffList.innerHTML === '') {
         staffList.innerHTML = '<p>No staff found.</p>';
       }
     } catch (error) {
-      staffList.innerHTML = `<p>Error: ${error.message}</p>`;
-    }
-  </script>
-</body>
-</html>
+      staffList.innerHTML = `<p>Error:
