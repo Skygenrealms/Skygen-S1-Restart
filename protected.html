@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Team Data</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">Skygen S1 Restart</a>
+      <div class="nav-links">
+        <a href="rules.html" class="nav-link">Rules</a>
+        <a href="admins.html" class="nav-link">Staff</a>
+        <a href="teams.html" class="nav-link">Teams</a>
+        <a href="login.html" class="nav-link">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="page-title">Edit Team Data</h1>
+    <p id="user-info"></p>
+    <form id="team-form">
+      <select id="team-name" required>
+        <option value="" disabled selected>Select a Team</option>
+        <!-- Team names will be populated dynamically -->
+      </select>
+      <button type="button" id="select-team">Select</button>
+      <input type="text" id="team-leader" placeholder="Team Leader (e.g., KarinaOMG9776)" required>
+      <button type="submit" id="push-team">Push</button>
+    </form>
+    <button id="sign-out">Sign Out</button>
+  </div>
+
+  <!-- Firebase SDK (loaded as modules) -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+    import { getFirestore, doc, setDoc, getDoc, getDocs, collection } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBiJ_uZZiV2TEf_KTOafAp3Mh6McWzJCv0",
+      authDomain: "skygen-login.firebaseapp.com",
+      projectId: "skygen-login",
+      storageBucket: "skygen-login.firebasestorage.app",
+      messagingSenderId: "536521368487",
+      appId: "1:536521368487:web:bda690853dbfbb2b21cc82"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('user-info').textContent = `Hello, ${user.displayName || user.email}!`;
+        populateTeamDropdown();
+      } else {
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Populate team dropdown
+    async function populateTeamDropdown() {
+      const teamSelect = document.getElementById('team-name');
+      try {
+        const querySnapshot = await getDocs(collection(db, 'teams'));
+        querySnapshot.forEach((doc) => {
+          const team = doc.data();
+          if (team.name && team.name.trim() !== '') {
+            const option = document.createElement('option');
+            option.value = doc.id; // Store document ID
+            option.textContent = team.name; // Display team name
+            teamSelect.appendChild(option);
+          }
+        });
+      } catch (error) {
+        document.getElementById('user-info').textContent = `Error loading teams: ${error.message}`;
+      }
+    }
+
+    // Select team and auto-fill leader
+    document.getElementById('select-team').addEventListener('click', async () => {
+      const teamId = document.getElementById('team-name').value;
+      if (!teamId) {
+        document.getElementById('user-info').textContent = 'Please select a team!';
+        return;
+      }
+      try {
+        const docRef = doc(db, 'teams', teamId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const team = docSnap.data();
+          document.getElementById('team-leader').value = team.leader || '';
+          document.getElementById('user-info').textContent = `Loaded leader for ${team.name}`;
+        } else {
+          document.getElementById('user-info').textContent = 'Team not found!';
+        }
+      } catch (error) {
+        document.getElementById('user-info').textContent = `Error: ${error.message}`;
+      }
+    });
+
+    // Save team data to Firestore
+    document.getElementById('team-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const teamId = document.getElementById('team-name').value;
+      const teamLeader = document.getElementById('team-leader').value.trim();
+      const user = auth.currentUser;
+
+      if (!teamId) {
+        document.getElementById('user-info').textContent = 'Please select a team!';
+        return;
+      }
+      if (!teamLeader) {
+        document.getElementById('user-info').textContent = 'Leader name is required!';
+        return;
+      }
+
+      try {
+        const docRef = doc(db, 'teams', teamId);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+          document.getElementById('user-info').textContent = 'Team not found!';
+          return;
+        }
+
+        const teamName = docSnap.data().name; // Preserve existing team name
+        await setDoc(docRef, {
+          name: teamName,
+          leader: teamLeader,
+          userId: user.uid,
+          timestamp: new Date().toISOString()
+        }, { merge: true });
+        document.getElementById('user-info').textContent = `Team ${teamName} updated successfully!`;
+        document.getElementById('team-leader').value = ''; // Clear leader input
+        document.getElementById('team-name').value = ''; // Reset dropdown
+      } catch (error) {
+        document.getElementById('user-info').textContent = `Error: ${error.message}`;
+      }
+    });
+
+    // Sign out
+    document.getElementById('sign-out').addEventListener('click', () => {
+      signOut(auth)
+        .then(() => {
+          window.location.href = 'index.html';
+        })
+        .catch((error) => {
+          document.getElementById('user-info').textContent = `Sign-out error: ${error.message}`;
+        });
+    });
+  </script>
+</body>
+</html>

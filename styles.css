@@ -1,3 +1,4 @@
+/* styles.css */
 :root {
     --primary-bg: #1e1e2f;
     --secondary-bg: #27293d;
@@ -87,17 +88,35 @@ body {
     color: var(--accent-primary);
 }
 
-/* --- Hero Section (Homepage) --- */
+/* --- Hero Section --- */
 .hero {
     background: linear-gradient(rgba(30, 30, 47, 0.8), rgba(30, 30, 47, 0.8)), url('https://www.minecraft.net/content/dam/games/minecraft/key-art/Caves-and-Cliffs-Part-II-Update_Key-Art.jpg') no-repeat center center/cover;
-    color: white;
+    color: var(--text-primary);
     padding: 100px 20px;
     text-align: center;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .hero h1 {
     font-size: 3.5em;
     margin-bottom: 10px;
+}
+
+.hero .subtitle {
+    font-size: 1.3em;
+    margin-bottom: 20px;
+}
+
+.hero .btn {
+    margin: 10px;
 }
 
 /* --- Buttons --- */
@@ -116,6 +135,7 @@ body {
     background-color: var(--accent-primary);
     color: var(--primary-bg);
 }
+
 .btn-primary:hover {
     background-color: var(--accent-secondary);
 }
@@ -125,6 +145,7 @@ body {
     border: 2px solid var(--accent-primary);
     color: var(--accent-primary);
 }
+
 .btn-secondary:hover {
     background-color: var(--accent-primary);
     color: var(--primary-bg);
@@ -139,6 +160,7 @@ body {
     margin-bottom: 25px;
     transition: transform 0.2s ease-in-out;
 }
+
 .card:hover {
     transform: translateY(-5px);
 }
@@ -149,12 +171,12 @@ body {
     padding-bottom: 10px;
     margin-top: 0;
 }
+
 .card h3 {
     margin-top: 0;
     margin-bottom: 10px;
     font-size: 1.4em;
     text-transform: capitalize;
-    /* Default color if no specific class is matched */
     color: var(--accent-primary);
 }
 
@@ -163,6 +185,7 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 25px;
 }
+
 .staff-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -177,8 +200,9 @@ body {
     font-size: 0.9em;
     font-weight: 600;
     color: #fff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
+
 .staff-role.owner { background-color: var(--role-owner); }
 .staff-role.co-owner { background-color: var(--role-co-owner); }
 .staff-role.head-admin { background-color: var(--role-head-admin); }
@@ -195,17 +219,21 @@ body {
     list-style: none;
     padding-left: 0;
 }
+
 .rule-list li {
     padding: 10px;
     border-bottom: 1px solid var(--secondary-bg);
     transition: background-color 0.2s;
 }
+
 .rule-list li:last-child {
     border-bottom: none;
 }
+
 .rule-list li:hover {
     background-color: var(--secondary-bg);
 }
+
 .rule-list li::before {
     content: '»';
     color: var(--accent-primary);
@@ -229,7 +257,6 @@ body {
 }
 
 .team-card h3 {
-    /* Add a shadow to make colors pop */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
@@ -248,63 +275,78 @@ body {
     opacity: 0.8;
 }
 
-/* --- Team Name Colors (FIXED) --- */
-.team-card .team-blaze { color: #F2BD27; }
-.team-card .team-iron { color: #D8D8D8; }
-.team-card .team-creeking { color: #5E81AC; }
-.team-card .team-ominous { color: #5D3A9B; }
-.team-card .team-deepdark { color: #0D6973; }
-.team-card .team-dragon { color: #C482FD; }
-.team-card .team-lapis { color: #2B52C9; }
-.team-card .team-emerald { color: #00B039; }
-.team-card .team-resin { color: #FFBF00; }
-.team-card .team-redstone { color: #FF0000; }
-.team-card .team-soul { color: #62D2D6; }
-.team-card .team-prismarine { color: #72B8A4; }
-.team-card .team-ice { color: #A3D5EE; }
-.team-card .team-coal { color: #747474; }
-.team-card .team-mangrove { color: #9A3E3E; }
-.team-card .team-lava { color: #FF7000; }
-.team-card .team-skeleton { color: #E0E0E0; }
-.team-card .team-milk { color: #FFFFFF; }
-.team-card .team-slime { color: #8AD44A; }
-.team-card .team-copper { color: #E28C5E; }
-.team-card .team-pumpkin { color: #E08221; }
-.team-card .team-water { color: #4369E8; }
-.team-card .team-dirty { color: #A16A43; }
-.team-card .team-zombie { color: #658458; }
-.team-card .team-cream { color: #FFFDD0; }
-.team-card .team-honey { color: #FFAA00; }
-.team-card .team-axolotl { color: #FF87AB; }
-.team-card .team-cactus { color: #008000; }
-.team-card .team-blood { color: #8b0000; }
-.team-card .team-snow { color: #F0F8FF; }
-.team-card .team-glowstone { color: #FFEC8B; }
-.team-card .team-firework { color: #FF69B4; }
-.team-card .team-moss { color: #699941; }
-.team-card .team-magma { color: #FF5500; }
-.team-card .team-villager { color: #BE8A64; }
-.team-card .team-black { color: #C0C0C0; } /* Made light grey for visibility */
-.team-card .team-turtle { color: #3A9D23; }
-.team-card .team-pickle { color: #6A7634; }
-.team-card .team-iron-2 { color: #D8D8D8; }
-.team-card .team-darkblue { color: #00008B; }
-.team-card .team-kelp { color: #4B681A; }
-.team-card .team-gold { color: #F9D831; }
-.team-card .team-green { color: #00FF00; }
-.team-card .team-skulk { color: #15A9A0; }
-.team-card .team-gunpowder { color: #A9A9A9; }
-.team-card .team-sniffer { color: #C04646; }
-.team-card .team-clown { color: #FF4500; }
-.team-card .team-netherite { color: #A0A0A0; }
-.team-card .team-ruby { color: #E0115F; }
-.team-card .team-darkness { color: #6E6E6E; }
-.team-card .team-uk { background: linear-gradient(to right, #012169, white 50%, #C8102E 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.team-card .team-clay { color: #A19B96; }
-.team-card .team-donut { color: #F4A460; }
-.team-card .team-rainbow { background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.team-card .team-ghast { color: #F5F5F5; }
-.team-card .team-light { color: #FFFFE0; }
-.team-card .team-light-blue { color: #ADD8E6; }
-.team-card .team-nether { color: #800000; }
-.team-card .team-kfc { background: linear-gradient(to right, #FE0000, white); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+/* --- Form Styling for protected.html --- */
+form {
+    display: flex;
+    flex
+
+
+    /* styles.css (partial - team-specific classes) */
+.team-blaze { color: #F2BD27; } /* Bright orange */
+.team-iron { color: #D8D8D8; } /* Light gray */
+.team-creeking { color: #4A2C2A; } /* Dark brown */
+.team-ominous { color: #2F2F2F; } /* Dark gray */
+.team-deepdark { color: #1A1A1A; } /* Near black */
+.team-dragon { color: #4B0082; } /* Indigo */
+.team-lapis { color: #1E90FF; } /* Dodger blue */
+.team-emerald { color: #00FF00; } /* Lime green */
+.team-resin { color: #FFD700; } /* Gold */
+.team-redstone { color: #FF0000; } /* Red */
+.team-soul { color: #40E0D0; } /* Turquoise */
+.team-prismarine { color: #39CCCC; } /* Teal */
+.team-ice { color: #ADD8E6; } /* Light blue */
+.team-coal { color: #333333; } /* Dark gray */
+.team-mangrove { color: #8B4513; } /* Saddle brown */
+.team-lava { color: #FF4500; } /* Orange red */
+.team-skeleton { color: #D3D3D3; } /* Light gray */
+.team-milk { color: #FFFFFF; } /* White */
+.team-slime { color: #32CD32; } /* Lime green */
+.team-copper { color: #B87333; } /* Copper */
+.team-pumpkin { color: #FF7518; } /* Pumpkin orange */
+.team-water { color: #0000FF; } /* Blue */
+.team-dirty { color: #6B4E31; } /* Dirt brown */
+.team-zombie { color: #006400; } /* Dark green */
+.team-cream { color: #FFFDD0; } /* Cream */
+.team-honey { color: #FFC107; } /* Amber */
+.team-axolotl { color: #FF69B4; } /* Hot pink */
+.team-cactus { color: #2E8B57; } /* Sea green */
+.team-blood { color: #8B0000; } /* Dark red */
+.team-snow { color: #F0F8FF; } /* Alice blue */
+.team-glowstone { color: #FFFF99; } /* Light yellow */
+.team-firework { color: #FF00FF; } /* Magenta */
+.team-moss { color: #556B2F; } /* Olive drab */
+.team-magma { color: #FF4500; } /* Orange red */
+.team-villager { color: #8A2BE2; } /* Blue violet */
+.team-black { color: #000000; } /* Black */
+.team-turtle { color: #008080; } /* Teal */
+.team-pickle { color: #9ACD32; } /* Yellow green */
+.team-iron-2 { color: #C0C0C0; } /* Silver */
+.team-darkblue { color: #00008B; } /* Dark blue */
+.team-kelp { color: #2E8B57; } /* Sea green */
+.team-gold { color: #FFD700; } /* Gold */
+.team-green { color: #008000; } /* Green */
+.team-skulk { color: #0F4C81; } /* Deep teal */
+.team-gunpowder { color: #4B4B4B; } /* Dark gray */
+.team-sniffer { color: #8B5A2B; } /* Tan */
+.team-clown { color: #FF6347; } /* Tomato */
+.team-netherite { color: #2F2F2F; } /* Dark gray */
+.team-ruby { color: #E0115F; } /* Ruby red */
+.team-darkness { color: #1C2526; } /* Very dark gray */
+.team-uk {
+  background: linear-gradient(90deg, #FF0000, #FFFFFF, #0000FF); /* Red, white, blue */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.team-clay { color: #D7D7D7; } /* Light gray */
+.team-donut { color: #FFB6C1; } /* Light pink */
+.team-rainbow {
+  background: linear-gradient(90deg, #FF0000, #FFA500, #FFFF00, #008000, #0000FF, #4B0082, #EE82EE);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.team-ghast { color: #F5F5F5; } /* White smoke */
+.team-light { color: #FFFFE0; } /* Light yellow */
+.team-light-blue { color: #87CEEB; } /* Sky blue */
+.team-nether { color: #8B0000; } /* Dark red */
+.team-kfc { color: #FF0000; } /* Red */
+.looking { color: #FF0000; font-style: italic; } /* For "Looking for leader" */
