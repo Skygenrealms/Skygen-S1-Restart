@@ -1,352 +1,101 @@
-/* styles.css */
-:root {
-    --primary-bg: #1e1e2f;
-    --secondary-bg: #27293d;
-    --card-bg: #2c2f48;
-    --text-primary: #e0e0e0;
-    --text-secondary: #a9a9a9;
-    --accent-primary: #4ecca3;
-    --accent-secondary: #3a8d7a;
-    --role-owner: #e74c3c;        /* Red */
-    --role-co-owner: #2ecc71;      /* Green */
-    --role-head-admin: #9b59b6;   /* Purple */
-    --role-head-builder: #e67e22; /* Orange */
-    --role-admin: #3498db;        /* Blue */
-    --shadow-color: rgba(0, 0, 0, 0.2);
-}
-
 body {
-    background-color: var(--primary-bg);
-    font-family: 'Poppins', sans-serif;
-    color: var(--text-primary);
-    margin: 0;
-    padding-top: 70px; /* Space for fixed navbar */
-    line-height: 1.6;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
 }
 
-.container {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 0 20px;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.page-title {
-    text-align: center;
-    color: var(--accent-primary);
-    font-size: 2.8em;
-    margin-bottom: 0;
-}
-
-.subtitle {
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: 1.1em;
-    max-width: 600px;
-    margin: 0 auto 40px auto;
-}
-
-/* --- Navbar --- */
 .navbar {
-    background-color: var(--secondary-bg);
-    padding: 15px 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 10px var(--shadow-color);
+  background-color: #333;
+  padding: 1rem;
 }
 
 .nav-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .nav-brand {
-    color: var(--accent-primary);
-    font-weight: 700;
-    font-size: 1.5em;
-    text-decoration: none;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
 }
 
-.nav-links a {
-    color: var(--text-primary);
-    text-decoration: none;
-    margin-left: 20px;
-    font-weight: 600;
-    transition: color 0.3s ease;
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
 }
 
-.nav-links a:hover {
-    color: var(--accent-primary);
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
 }
 
-/* --- Hero Section --- */
-.hero {
-    background: linear-gradient(rgba(30, 30, 47, 0.8), rgba(30, 30, 47, 0.8)), url('https://www.minecraft.net/content/dam/games/minecraft/key-art/Caves-and-Cliffs-Part-II-Update_Key-Art.jpg') no-repeat center center/cover;
-    color: var(--text-primary);
-    padding: 100px 20px;
-    text-align: center;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.nav-link:hover {
+  color: #ddd;
 }
 
-.hero-content {
-    max-width: 800px;
-    margin: 0 auto;
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
-.hero h1 {
-    font-size: 3.5em;
-    margin-bottom: 10px;
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
-.hero .subtitle {
-    font-size: 1.3em;
-    margin-bottom: 20px;
+.subtitle {
+  font-size: 1.2rem;
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
 }
 
-.hero .btn {
-    margin: 10px;
-}
-
-/* --- Buttons --- */
-.btn {
-    display: inline-block;
-    padding: 12px 25px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    border: none;
-}
-
-.btn-primary {
-    background-color: var(--accent-primary);
-    color: var(--primary-bg);
-}
-
-.btn-primary:hover {
-    background-color: var(--accent-secondary);
-}
-
-.btn-secondary {
-    background-color: transparent;
-    border: 2px solid var(--accent-primary);
-    color: var(--accent-primary);
-}
-
-.btn-secondary:hover {
-    background-color: var(--accent-primary);
-    color: var(--primary-bg);
-}
-
-/* --- Cards & Grids --- */
 .card {
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    padding: 25px;
-    box-shadow: 0 4px 15px var(--shadow-color);
-    margin-bottom: 25px;
-    transition: transform 0.2s ease-in-out;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-bottom: 1rem;
 }
 
-.card:hover {
-    transform: translateY(-5px);
+input {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
-.card h2 {
-    color: var(--accent-primary);
-    border-bottom: 2px solid var(--secondary-bg);
-    padding-bottom: 10px;
-    margin-top: 0;
+.btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 100%;
+  margin: 0.5rem 0;
 }
 
-.card h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.4em;
-    text-transform: capitalize;
-    color: var(--accent-primary);
+.btn:hover {
+  background-color: #0056b3;
 }
 
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
+.error-message {
+  color: #ff0000;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 1rem;
 }
-
-.staff-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-}
-
-/* --- Staff Page Specifics --- */
-.staff-role {
-    display: inline-block;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 0.9em;
-    font-weight: 600;
-    color: #fff;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.staff-role.owner { background-color: var(--role-owner); }
-.staff-role.co-owner { background-color: var(--role-co-owner); }
-.staff-role.head-admin { background-color: var(--role-head-admin); }
-.staff-role.head-builder { background-color: var(--role-head-builder); }
-.staff-role.admin { background-color: var(--role-admin); }
-
-.staff-name {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-}
-
-/* --- Rules Page Specifics --- */
-.rule-list {
-    list-style: none;
-    padding-left: 0;
-}
-
-.rule-list li {
-    padding: 10px;
-    border-bottom: 1px solid var(--secondary-bg);
-    transition: background-color 0.2s;
-}
-
-.rule-list li:last-child {
-    border-bottom: none;
-}
-
-.rule-list li:hover {
-    background-color: var(--secondary-bg);
-}
-
-.rule-list li::before {
-    content: '»';
-    color: var(--accent-primary);
-    margin-right: 15px;
-    font-weight: bold;
-}
-
-.consequences strong {
-    color: var(--role-owner);
-}
-
-/* --- Teams Page Specifics --- */
-.team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-}
-
-.team-card {
-    padding: 20px;
-}
-
-.team-card h3 {
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-}
-
-.team-card p {
-    margin: 5px 0;
-    font-size: 0.95em;
-}
-
-.team-card strong {
-    color: var(--text-secondary);
-}
-
-.looking {
-    color: var(--text-secondary);
-    font-style: italic;
-    opacity: 0.8;
-}
-
-/* --- Form Styling for protected.html --- */
-form {
-    display: flex;
-    flex
-
-
-    /* styles.css (partial - team-specific classes) */
-.team-blaze { color: #F2BD27; } /* Bright orange */
-.team-iron { color: #D8D8D8; } /* Light gray */
-.team-creeking { color: #4A2C2A; } /* Dark brown */
-.team-ominous { color: #2F2F2F; } /* Dark gray */
-.team-deepdark { color: #1A1A1A; } /* Near black */
-.team-dragon { color: #4B0082; } /* Indigo */
-.team-lapis { color: #1E90FF; } /* Dodger blue */
-.team-emerald { color: #00FF00; } /* Lime green */
-.team-resin { color: #FFD700; } /* Gold */
-.team-redstone { color: #FF0000; } /* Red */
-.team-soul { color: #40E0D0; } /* Turquoise */
-.team-prismarine { color: #39CCCC; } /* Teal */
-.team-ice { color: #ADD8E6; } /* Light blue */
-.team-coal { color: #333333; } /* Dark gray */
-.team-mangrove { color: #8B4513; } /* Saddle brown */
-.team-lava { color: #FF4500; } /* Orange red */
-.team-skeleton { color: #D3D3D3; } /* Light gray */
-.team-milk { color: #FFFFFF; } /* White */
-.team-slime { color: #32CD32; } /* Lime green */
-.team-copper { color: #B87333; } /* Copper */
-.team-pumpkin { color: #FF7518; } /* Pumpkin orange */
-.team-water { color: #0000FF; } /* Blue */
-.team-dirty { color: #6B4E31; } /* Dirt brown */
-.team-zombie { color: #006400; } /* Dark green */
-.team-cream { color: #FFFDD0; } /* Cream */
-.team-honey { color: #FFC107; } /* Amber */
-.team-axolotl { color: #FF69B4; } /* Hot pink */
-.team-cactus { color: #2E8B57; } /* Sea green */
-.team-blood { color: #8B0000; } /* Dark red */
-.team-snow { color: #F0F8FF; } /* Alice blue */
-.team-glowstone { color: #FFFF99; } /* Light yellow */
-.team-firework { color: #FF00FF; } /* Magenta */
-.team-moss { color: #556B2F; } /* Olive drab */
-.team-magma { color: #FF4500; } /* Orange red */
-.team-villager { color: #8A2BE2; } /* Blue violet */
-.team-black { color: #000000; } /* Black */
-.team-turtle { color: #008080; } /* Teal */
-.team-pickle { color: #9ACD32; } /* Yellow green */
-.team-iron-2 { color: #C0C0C0; } /* Silver */
-.team-darkblue { color: #00008B; } /* Dark blue */
-.team-kelp { color: #2E8B57; } /* Sea green */
-.team-gold { color: #FFD700; } /* Gold */
-.team-green { color: #008000; } /* Green */
-.team-skulk { color: #0F4C81; } /* Deep teal */
-.team-gunpowder { color: #4B4B4B; } /* Dark gray */
-.team-sniffer { color: #8B5A2B; } /* Tan */
-.team-clown { color: #FF6347; } /* Tomato */
-.team-netherite { color: #2F2F2F; } /* Dark gray */
-.team-ruby { color: #E0115F; } /* Ruby red */
-.team-darkness { color: #1C2526; } /* Very dark gray */
-.team-uk {
-  background: linear-gradient(90deg, #FF0000, #FFFFFF, #0000FF); /* Red, white, blue */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.team-clay { color: #D7D7D7; } /* Light gray */
-.team-donut { color: #FFB6C1; } /* Light pink */
-.team-rainbow {
-  background: linear-gradient(90deg, #FF0000, #FFA500, #FFFF00, #008000, #0000FF, #4B0082, #EE82EE);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.team-ghast { color: #F5F5F5; } /* White smoke */
-.team-light { color: #FFFFE0; } /* Light yellow */
-.team-light-blue { color: #87CEEB; } /* Sky blue */
-.team-nether { color: #8B0000; } /* Dark red */
-.team-kfc { color: #FF0000; } /* Red */
-.looking { color: #FF0000; font-style: italic; } /* For "Looking for leader" */
