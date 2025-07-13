@@ -9,7 +9,7 @@
     --accent-secondary: #36DDF8;  /* Bright Cyan */
     --border-color: rgba(164, 80, 249, 0.2);
     --shadow-color: rgba(0, 0, 0, 0.25);
-    --warning-color: #f39c12;
+    --warning-color: #f39c12;     /* This is the orange color we'll use */
 }
 
 body {
@@ -221,7 +221,9 @@ body {
 .staff-role.co-owner { background: linear-gradient(45deg, var(--accent-secondary), #69e4fa); color: var(--primary-bg); }
 .staff-role.head-admin { background-color: var(--accent-primary); opacity: 0.9; }
 .staff-role.head-builder { background-color: var(--accent-secondary); opacity: 0.9; color: var(--primary-bg); }
-.staff-role.admin { background-color: var(--secondary-bg); border-color: var(--text-secondary); color: var(--text-secondary); }
+/* ===== THIS LINE IS CHANGED ===== */
+.staff-role.admin { background-color: var(--warning-color); }
+/* =============================== */
 
 .staff-name {
     font-size: 1.6em;
@@ -422,3 +424,56 @@ button#sign-out:hover, button#google-signin:hover, button#github-signin:hover {
 .team-light-blue { color: #87CEEB; }
 .team-nether { color: #B22222; } /* Firebrick */
 .team-kfc { color: #F40002; }
+
+/* --- Cookie Consent Banner --- */
+.cookie-consent-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0; /* Use right: 0 instead of width: 100% for better consistency */
+    background-color: var(--card-bg);
+    padding: 20px 40px;
+    box-shadow: 0 -2px 15px var(--shadow-color);
+    border-top: 1px solid var(--border-color);
+    z-index: 1001;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    /* --- Core Fix: Default state is hidden and ready to transition --- */
+    transform: translateY(100%); /* Start below the viewport */
+    visibility: hidden;
+    transition: transform 0.5s ease-in-out, visibility 0.5s;
+}
+
+/* This new class will be added by JS to show the banner */
+.cookie-consent-banner.visible {
+    transform: translateY(0); /* Move to its final position */
+    visibility: visible;
+}
+
+.cookie-consent-banner p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+.cookie-consent-banner .buttons {
+    display: flex;
+    gap: 15px;
+    flex-shrink: 0;
+}
+
+/* Responsive adjustments for the cookie banner */
+@media (max-width: 768px) {
+    .cookie-consent-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    .cookie-consent-banner .buttons {
+        width: 100%;
+        justify-content: center;
+    }
+}
