@@ -21,6 +21,7 @@
     </div>
   </nav>
   <div class="container" style="max-width: 600px;">
+    <!-- Existing Edit Data Card -->
     <div class="card">
       <h1 class="page-title">Edit Data</h1>
       <p id="user-info" class="text-center"></p>
@@ -73,10 +74,24 @@
       </div>
       <p id="message" class="text-center"></p>
     </div>
+
+    <!-- NEW: Password Reset Card -->
+    <div class="card">
+        <h2 class="page-title" style="font-size: 2em; margin-bottom: 20px;">Reset Password</h2>
+        <form id="password-reset-form">
+          <input type="password" id="current-password" placeholder="Current Password" required>
+          <input type="password" id="new-password" placeholder="New Password (min. 6 characters)" required>
+          <input type="password" id="confirm-password" placeholder="Confirm New Password" required>
+          <button type="submit" class="btn btn-primary">Update Password</button>
+        </form>
+        <p id="password-message" class="text-center"></p>
+    </div>
+
   </div>
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+    // UPDATED: Added EmailAuthProvider, reauthenticateWithCredential, updatePassword
+    import { getAuth, onAuthStateChanged, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
     import { getFirestore, doc, setDoc, getDoc, getDocs, collection, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
     const firebaseConfig = {
@@ -352,6 +367,73 @@
         document.getElementById(`${button.dataset.tab}-tab`).classList.add('active');
       });
     });
+
+    // NEW: Password Reset Logic
+    document.getElementById('password-reset-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const passwordMessageEl = document.getElementById('password-message');
+      const currentPassword = document.getElementById('current-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      const user = auth.currentUser;
+
+      passwordMessageEl.textContent = ''; // Clear previous messages
+
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        passwordMessageEl.textContent = 'All fields are required.';
+        passwordMessageEl.style.color = 'var(--warning-color)';
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        passwordMessageEl.textContent = 'New passwords do not match.';
+        passwordMessageEl.style.color = 'var(--warning-color)';
+        return;
+      }
+
+      if (newPassword.length < 6) {
+        passwordMessageEl.textContent = 'New password must be at least 6 characters long.';
+        passwordMessageEl.style.color = 'var(--warning-color)';
+        return;
+      }
+
+      if (!user) {
+         passwordMessageEl.textContent = 'No user is signed in. Please refresh the page.';
+         passwordMessageEl.style.color = 'var(--warning-color)';
+         return;
+      }
+
+      try {
+        // Create a credential with the user's email and the current password.
+        const credential = EmailAuthProvider.credential(user.email, currentPassword);
+        
+        // Re-authenticate the user to confirm their identity.
+        await reauthenticateWithCredential(user, credential);
+        
+        // If re-authentication is successful, update the password.
+        await updatePassword(user, newPassword);
+
+        passwordMessageEl.textContent = 'Password updated successfully!';
+        passwordMessageEl.style.color = 'var(--accent-secondary)';
+        document.getElementById('password-reset-form').reset();
+
+      } catch (error) {
+        console.error("Password Reset Error:", error);
+        // Handle specific errors
+        if (error.code === 'auth/wrong-password') {
+          passwordMessageEl.textContent = 'Incorrect current password. Please try again.';
+        } else if (error.code === 'auth/weak-password') {
+          passwordMessageEl.textContent = 'The new password is too weak. Please choose a stronger one.';
+        } else if (error.code === 'auth/requires-recent-login') {
+          passwordMessageEl.textContent = 'This is a sensitive action. Please sign out and sign back in to continue.';
+        } else {
+          passwordMessageEl.textContent = `An unexpected error occurred: ${error.message}`;
+        }
+        passwordMessageEl.style.color = 'var(--warning-color)';
+      }
+    });
+
   </script>
 </body>
 </html>
