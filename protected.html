@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Team Data</title>
+  <title>Edit Data - Skygen S1 Restart</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -16,35 +16,69 @@
         <a href="rules.html" class="nav-link">Rules</a>
         <a href="admins.html" class="nav-link">Staff</a>
         <a href="teams.html" class="nav-link">Teams</a>
-        <a href="login.html" class="nav-link">Login</a>
+        <a href="#" id="sign-out" class="nav-link">Sign Out</a>
       </div>
     </div>
   </nav>
-
   <div class="container" style="max-width: 600px;">
-      <div class="card">
-        <h1 class="page-title">Edit Team Data</h1>
-        <p id="user-info" class="text-center"></p>
+    <div class="card">
+      <h1 class="page-title">Edit Data</h1>
+      <p id="user-info" class="text-center"></p>
+      <div class="tabs">
+        <button class="tab-button active" data-tab="team">Edit Teams</button>
+        <button class="tab-button" data-tab="admin">Edit Admins</button>
+      </div>
+      <div id="team-tab" class="tab-content active">
         <form id="team-form">
           <select id="team-name" required>
             <option value="" disabled selected>Select a Team</option>
-            <!-- Team names will be populated dynamically -->
           </select>
-          <button type="button" id="select-team">Load Team Leader</button>
+          <button type="button" id="select-team" class="btn btn-secondary">Load Team Leader</button>
           <input type="text" id="team-leader" placeholder="Team Leader (e.g., KarinaOMG9776)" required>
-          <button type="submit" id="push-team">Push Update</button>
+          <button type="submit" class="btn btn-primary">Update Team</button>
         </form>
-        <button id="sign-out">Sign Out</button>
       </div>
+      <div id="admin-tab" class="tab-content">
+        <form id="admin-form">
+          <select id="admin-id" required>
+            <option value="" disabled selected>Select an Admin</option>
+          </select>
+          <button type="button" id="select-admin" class="btn btn-secondary">Load Admin</button>
+          <input type="text" id="admin-name" placeholder="Admin Name (e.g., BDN Callum)" required>
+          <select id="admin-rank" required>
+            <option value="" disabled selected>Select Rank</option>
+            <option value="Owner">Owner</option>
+            <option value="Co-Owner">Co-Owner</option>
+            <option value="Head Admin">Head Admin</option>
+            <option value="Head Builder/Admin">Head Builder/Admin</option>
+            <option value="Admin">Admin</option>
+          </select>
+          <button type="submit" class="btn btn-primary">Update Admin</button>
+          <button type="button" id="delete-admin" class="btn btn-warning">Delete Admin</button>
+        </form>
+        <form id="add-admin-form" style="margin-top: 20px;">
+          <h3>Add New Admin</h3>
+          <input type="text" id="new-admin-id" placeholder="Admin ID (e.g., bdn-callum)" required>
+          <input type="text" id="new-admin-name" placeholder="Admin Name (e.g., BDN Callum)" required>
+          <select id="new-admin-rank" required>
+            <option value="" disabled selected>Select Rank</option>
+            <option value="Owner">Owner</option>
+            <option value="Co-Owner">Co-Owner</option>
+            <option value="Head Admin">Head Admin</option>
+            <option value="Head Builder/Admin">Head Builder/Admin</option>
+            <option value="Admin">Admin</option>
+          </select>
+          <button type="submit" class="btn btn-primary">Add Admin</button>
+        </form>
+      </div>
+      <p id="message" class="text-center"></p>
+    </div>
   </div>
-
-  <!-- Firebase SDK (loaded as modules) -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
     import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-    import { getFirestore, doc, setDoc, getDoc, getDocs, collection } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+    import { getFirestore, doc, setDoc, getDoc, getDocs, collection, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBiJ_uZZiV2TEf_KTOafAp3Mh6McWzJCv0",
       authDomain: "skygen-login.firebaseapp.com",
@@ -54,24 +88,22 @@
       appId: "1:536521368487:web:bda690853dbfbb2b21cc82"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
     const userInfoEl = document.getElementById('user-info');
+    const messageEl = document.getElementById('message');
 
-    // Check authentication state
     onAuthStateChanged(auth, (user) => {
       if (user) {
         userInfoEl.textContent = `Hello, ${user.displayName || user.email}!`;
         populateTeamDropdown();
+        populateAdminDropdown();
       } else {
         window.location.href = 'index.html';
       }
     });
 
-    // Populate team dropdown
     async function populateTeamDropdown() {
       const teamSelect = document.getElementById('team-name');
       try {
@@ -80,21 +112,41 @@
           const team = doc.data();
           if (team.name && team.name.trim() !== '') {
             const option = document.createElement('option');
-            option.value = doc.id; // Store document ID
-            option.textContent = team.name; // Display team name
+            option.value = doc.id;
+            option.textContent = team.name;
             teamSelect.appendChild(option);
           }
         });
       } catch (error) {
-        userInfoEl.textContent = `Error loading teams: ${error.message}`;
+        messageEl.textContent = `Error loading teams: ${error.message}`;
+        messageEl.style.color = 'var(--warning-color)';
       }
     }
 
-    // Select team and auto-fill leader
+    async function populateAdminDropdown() {
+      const adminSelect = document.getElementById('admin-id');
+      try {
+        const querySnapshot = await getDocs(collection(db, 'admins'));
+        querySnapshot.forEach((doc) => {
+          const admin = doc.data();
+          if (admin.name && admin.name.trim() !== '') {
+            const option = document.createElement('option');
+            option.value = doc.id;
+            option.textContent = admin.name;
+            adminSelect.appendChild(option);
+          }
+        });
+      } catch (error) {
+        messageEl.textContent = `Error loading admins: ${error.message}`;
+        messageEl.style.color = 'var(--warning-color)';
+      }
+    }
+
     document.getElementById('select-team').addEventListener('click', async () => {
       const teamId = document.getElementById('team-name').value;
       if (!teamId) {
-        userInfoEl.textContent = 'Please select a team!';
+        messageEl.textContent = 'Please select a team!';
+        messageEl.style.color = 'var(--warning-color)';
         return;
       }
       try {
@@ -103,16 +155,17 @@
         if (docSnap.exists()) {
           const team = docSnap.data();
           document.getElementById('team-leader').value = team.leader || '';
-          userInfoEl.textContent = `Loaded leader for ${team.name}`;
+          messageEl.textContent = `Loaded leader for ${team.name}`;
         } else {
-          userInfoEl.textContent = 'Team not found!';
+          messageEl.textContent = 'Team not found!';
+          messageEl.style.color = 'var(--warning-color)';
         }
       } catch (error) {
-        userInfoEl.textContent = `Error: ${error.message}`;
+        messageEl.textContent = `Error: ${error.message}`;
+        messageEl.style.color = 'var(--warning-color)';
       }
     });
 
-    // Save team data to Firestore
     document.getElementById('team-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const teamId = document.getElementById('team-name').value;
@@ -120,11 +173,13 @@
       const user = auth.currentUser;
 
       if (!teamId) {
-        userInfoEl.textContent = 'Please select a team!';
+        messageEl.textContent = 'Please select a team!';
+        messageEl.style.color = 'var(--warning-color)';
         return;
       }
       if (!teamLeader) {
-        userInfoEl.textContent = 'Leader name is required!';
+        messageEl.textContent = 'Leader name is required!';
+        messageEl.style.color = 'var(--warning-color)';
         return;
       }
 
@@ -132,34 +187,170 @@
         const docRef = doc(db, 'teams', teamId);
         const docSnap = await getDoc(docRef);
         if (!docSnap.exists()) {
-          userInfoEl.textContent = 'Team not found!';
+          messageEl.textContent = 'Team not found!';
+          messageEl.style.color = 'var(--warning-color)';
           return;
         }
 
-        const teamName = docSnap.data().name; // Preserve existing team name
+        const teamName = docSnap.data().name;
         await setDoc(docRef, {
           name: teamName,
           leader: teamLeader,
           userId: user.uid,
           timestamp: new Date().toISOString()
         }, { merge: true });
-        userInfoEl.textContent = `Team ${teamName} updated successfully!`;
-        document.getElementById('team-leader').value = ''; // Clear leader input
-        document.getElementById('team-name').value = ''; // Reset dropdown
+        messageEl.textContent = `Team ${teamName} updated successfully!`;
+        document.getElementById('team-leader').value = '';
+        document.getElementById('team-name').value = '';
       } catch (error) {
-        userInfoEl.textContent = `Error: ${error.message}`;
+        messageEl.textContent = `Error: ${error.message}`;
+        messageEl.style.color = 'var(--warning-color)';
       }
     });
 
-    // Sign out
-    document.getElementById('sign-out').addEventListener('click', () => {
-      signOut(auth)
-        .then(() => {
-          window.location.href = 'index.html';
-        })
-        .catch((error) => {
-          userInfoEl.textContent = `Sign-out error: ${error.message}`;
+    document.getElementById('select-admin').addEventListener('click', async () => {
+      const adminId = document.getElementById('admin-id').value;
+      if (!adminId) {
+        messageEl.textContent = 'Please select an admin!';
+        messageEl.style.color = 'var(--warning-color)';
+        return;
+      }
+      try {
+        const docRef = doc(db, 'admins', adminId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const admin = docSnap.data();
+          document.getElementById('admin-name').value = admin.name || '';
+          document.getElementById('admin-rank').value = admin.rank || '';
+          messageEl.textContent = `Loaded admin ${admin.name}`;
+        } else {
+          messageEl.textContent = 'Admin not found!';
+          messageEl.style.color = 'var(--warning-color)';
+        }
+      } catch (error) {
+        messageEl.textContent = `Error: ${error.message}`;
+        messageEl.style.color = 'var(--warning-color)';
+      }
+    });
+
+    document.getElementById('admin-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const adminId = document.getElementById('admin-id').value;
+      const adminName = document.getElementById('admin-name').value.trim();
+      const adminRank = document.getElementById('admin-rank').value;
+      const user = auth.currentUser;
+
+      if (!adminId) {
+        messageEl.textContent = 'Please select an admin!';
+        messageEl.style.color = 'var(--warning-color)';
+        return;
+      }
+      if (!adminName || !adminRank) {
+        messageEl.textContent = 'Admin name and rank are required!';
+        messageEl.style.color = 'var(--warning-color)';
+        return;
+      }
+
+      try {
+        const docRef = doc(db, 'admins', adminId);
+        await setDoc(docRef, {
+          name: adminName,
+          rank: adminRank,
+          userId: user.uid,
+          timestamp: new Date().toISOString()
+        }, { merge: true });
+        messageEl.textContent = `Admin ${adminName} updated successfully!`;
+        document.getElementById('admin-id').value = '';
+        document.getElementById('admin-name').value = '';
+        document.getElementById('admin-rank').value = '';
+      } catch (error) {
+        messageEl.textContent = `Error: ${error.message}`;
+        messageEl.style.color = 'var(--warning-color)';
+      }
+    });
+
+    document.getElementById('delete-admin').addEventListener('click', async () => {
+      const adminId = document.getElementById('admin-id').value;
+      if (!adminId) {
+        messageEl.textContent = 'Please select an admin to delete!';
+        messageEl.style.color = 'var(--warning-color)';
+        return;
+      }
+      if (!confirm(`Are you sure you want to delete admin ${document.getElementById('admin-name').value}?`)) {
+        return;
+      }
+      try {
+        await deleteDoc(doc(db, 'admins', adminId));
+        messageEl.textContent = `Admin deleted successfully!`;
+        document.getElementById('admin-id').value = '';
+        document.getElementById('admin-name').value = '';
+        document.getElementById('admin-rank').value = '';
+        document.getElementById('admin-id').innerHTML = '<option value="" disabled selected>Select an Admin</option>';
+        populateAdminDropdown();
+      } catch (error) {
+        messageEl.textContent = `Error: ${error.message}`;
+        messageEl.style.color = 'var(--warning-color)';
+      }
+    });
+
+    document.getElementById('add-admin-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const adminId = document.getElementById('new-admin-id').value.trim().toLowerCase();
+      const adminName = document.getElementById('new-admin-name').value.trim();
+      const adminRank = document.getElementById('new-admin-rank').value;
+      const user = auth.currentUser;
+
+      if (!adminId || !adminName || !adminRank) {
+        messageEl.textContent = 'All fields are required!';
+        messageEl.style.color = 'var(--warning-color)';
+        return;
+      }
+
+      try {
+        const docRef = doc(db, 'admins', adminId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          messageEl.textContent = `Admin ID ${adminId} already exists!`;
+          messageEl.style.color = 'var(--warning-color)';
+          return;
+        }
+
+        await setDoc(docRef, {
+          name: adminName,
+          rank: adminRank,
+          userId: user.uid,
+          timestamp: new Date().toISOString()
         });
+        messageEl.textContent = `Admin ${adminName} added successfully!`;
+        document.getElementById('new-admin-id').value = '';
+        document.getElementById('new-admin-name').value = '';
+        document.getElementById('new-admin-rank').value = '';
+        document.getElementById('admin-id').innerHTML = '<option value="" disabled selected>Select an Admin</option>';
+        populateAdminDropdown();
+      } catch (error) {
+        messageEl.textContent = `Error: ${error.message}`;
+        messageEl.style.color = 'var(--warning-color)';
+      }
+    });
+
+    document.getElementById('sign-out').addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        window.location.href = 'index.html';
+      } catch (error) {
+        messageEl.textContent = `Sign-out error: ${error.message}`;
+        messageEl.style.color = 'var(--warning-color)';
+      }
+    });
+
+    // Tab switching
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById(`${button.dataset.tab}-tab`).classList.add('active');
+      });
     });
   </script>
 </body>
