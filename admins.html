@@ -16,16 +16,15 @@
         <a href="rules.html" class="nav-link">Rules</a>
         <a href="admins.html" class="nav-link">Staff</a>
         <a href="teams.html" class="nav-link">Teams</a>
+        <a href="login.html" class="nav-link">Login</a>
       </div>
     </div>
   </nav>
-
   <div class="container">
     <h1 class="page-title">Staff Team</h1>
     <p class="subtitle">Meet the staff of the Skygen Realm.</p>
     <div class="staff-grid" id="staff-list"></div>
   </div>
-
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
     import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -39,7 +38,6 @@
       appId: "1:536521368487:web:bda690853dbfbb2b21cc82"
     };
 
-    // Define rank hierarchy
     const rankOrder = {
       'Owner': 1,
       'Co-Owner': 2,
@@ -48,59 +46,44 @@
       'Admin': 5
     };
 
-    console.log('Initializing Firebase...');
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    console.log('Firestore initialized.');
-
     const staffList = document.getElementById('staff-list');
-    console.log('staff-list element:', staffList);
 
     try {
-      console.log('Fetching admins from Firestore...');
       const querySnapshot = await getDocs(collection(db, 'admins'));
-      console.log('Query snapshot size:', querySnapshot.size);
-
       const admins = [];
       querySnapshot.forEach((doc) => {
         const admin = doc.data();
-        console.log(`Processing document: ${doc.id}`, admin);
         if (!admin.name || !admin.rank || admin.name.trim() === '' || admin.rank.trim() === '') {
-          console.log(`Skipping invalid document: ${doc.id}`);
           return;
         }
         admins.push({ id: doc.id, ...admin });
       });
-      console.log('Fetched admins:', admins);
 
-      // Sort admins by rank
+      if (admins.length === 0) {
+        staffList.innerHTML = '<p class="text-center">No staff found.</p>';
+        return;
+      }
+
       admins.sort((a, b) => {
         const rankA = rankOrder[a.rank] || 999;
         const rankB = rankOrder[b.rank] || 999;
-        if (rankA !== rankB) return rankA - rankB;
-        return a.name.localeCompare(b.name);
+        return rankA !== rankB ? rankA - rankB : a.name.localeCompare(b.name);
       });
-      console.log('Sorted admins:', admins);
 
       staffList.innerHTML = '';
-      if (admins.length === 0) {
-        console.log('No valid admins found.');
-        staffList.innerHTML = '<p>No staff found.</p>';
-      } else {
-        admins.forEach((admin) => {
-          console.log(`Rendering admin: ${admin.name}`);
-          const adminDiv = document.createElement('div');
-          adminDiv.className = `card text-center staff-${admin.id.toLowerCase()}`;
-          adminDiv.innerHTML = `
-            <h3 class="staff-name">${admin.name}</h3>
-            <p class="staff-role ${admin.rank.toLowerCase().replace(/[^a-z0-9]/g, '-')}-role">${admin.rank}</p>
-          `;
-          staffList.appendChild(adminDiv);
-        });
-      }
+      admins.forEach((admin) => {
+        const adminDiv = document.createElement('div');
+        adminDiv.className = `card text-center staff-${admin.id.toLowerCase()}`;
+        adminDiv.innerHTML = `
+          <h3 class="staff-name">${admin.name}</h3>
+          <p class="staff-role ${admin.rank.toLowerCase().replace(/[^a-z0-9]/g, '-')}-role">${admin.rank}</p>
+        `;
+        staffList.appendChild(adminDiv);
+      });
     } catch (error) {
-      console.error('Error fetching admins:', error);
-      staffList.innerHTML = `<p>Error: ${error.message}</p>`;
+      staffList.innerHTML = `<p class="text-center" style="color: var(--warning-color);">Error: ${error.message}</p>`;
     }
   </script>
 </body>
