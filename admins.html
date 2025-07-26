@@ -45,6 +45,13 @@
       'Head Builder/Admin': 4,
       'Admin': 5
     };
+    
+    // SVG icons as constants for reusability
+    const ICONS = {
+      youtube: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg>`,
+      x: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231L18.244 2.25zM17.5 19.5h1.5l-8.5-11H9l8.5 11z"></path></svg>`,
+      tiktok: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.05-4.86-.95-6.43-2.88-1.57-1.93-2.2-4.35-1.95-6.73.25-2.37 1.35-4.57 2.99-6.27 1.64-1.7 3.75-2.85 5.94-3.23.08-2.89.01-5.78.02-8.66z"></path></svg>`
+    };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -59,7 +66,6 @@
         const admins = [];
         querySnapshot.forEach((doc) => {
           const admin = doc.data();
-          console.log(`Processing admin: ${doc.id}`, admin);
           if (!admin.name || !admin.rank || admin.name.trim() === '' || admin.rank.trim() === '') {
             console.warn(`Skipping invalid admin: ${doc.id}`, admin);
             return;
@@ -68,7 +74,6 @@
         });
 
         if (admins.length === 0) {
-          console.log('No valid admins found');
           staffList.innerHTML = '<p class="text-center">No staff found.</p>';
           return;
         }
@@ -79,15 +84,26 @@
           return rankA !== rankB ? rankA - rankB : a.name.localeCompare(b.name);
         });
 
-        console.log('Sorted admins:', admins);
-
         staffList.innerHTML = '';
         admins.forEach((admin) => {
           const adminDiv = document.createElement('div');
           adminDiv.className = `card text-center staff-${admin.id.toLowerCase()}`;
+          
+          let socialLinksHTML = '';
+          if (admin.youtube) {
+            socialLinksHTML += `<a href="${admin.youtube}" target="_blank" rel="noopener noreferrer" class="social-link youtube" title="YouTube">${ICONS.youtube}</a>`;
+          }
+          if (admin.x) {
+            socialLinksHTML += `<a href="${admin.x}" target="_blank" rel="noopener noreferrer" class="social-link x" title="X">${ICONS.x}</a>`;
+          }
+          if (admin.tiktok) {
+            socialLinksHTML += `<a href="${admin.tiktok}" target="_blank" rel="noopener noreferrer" class="social-link tiktok" title="TikTok">${ICONS.tiktok}</a>`;
+          }
+
           adminDiv.innerHTML = `
             <h3 class="staff-name">${admin.name}</h3>
             <p class="staff-role ${admin.rank.toLowerCase().replace(/[^a-z0-9]/g, '-')}-role">${admin.rank}</p>
+            ${socialLinksHTML ? `<div class="staff-socials">${socialLinksHTML}</div>` : ''}
           `;
           staffList.appendChild(adminDiv);
         });

@@ -225,6 +225,54 @@ body {
 .staff-role.head-builder-admin { background: linear-gradient(45deg, #4682B4, #87CEEB); color: var(--primary-bg); }
 .staff-role.admin { background: linear-gradient(45deg, #32CD32, #90EE90); }
 
+/* Staff Card Socials */
+.staff-socials {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--secondary-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.social-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  color: #fff;
+}
+
+.social-link.youtube:hover {
+  background-color: #FF0000;
+  border-color: #FF0000;
+}
+
+.social-link.x:hover {
+  background-color: #000000;
+  border-color: #1a1a1a;
+}
+
+.social-link.tiktok:hover {
+  background-color: #000000;
+  border-color: #1a1a1a;
+}
+
 /* Rules Page */
 .rule-list {
   list-style: none;
